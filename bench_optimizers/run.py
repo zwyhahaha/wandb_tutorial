@@ -28,22 +28,25 @@ train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 test_dataset = datasets.MNIST(root="./data", train=False, transform=transform, download=True)
 test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-def train_and_evaluate(optimizer_name):
-    wandb.init(project="optimizer_comparison", name=f"{optimizer_name}_run")
+wandb.init()
+
+def train_and_evaluate():
+    
     config = wandb.config
-    config.batch_size = BATCH_SIZE
-    config.epochs = EPOCHS
-    config.optimizer = optimizer_name
+    optimizer_name = config.optimizer
+    learning_rate = config.learning_rate
+
+    wandb.run.name = f"{optimizer_name}_lr_{learning_rate}"
 
     model = SimpleNN()
     criterion = nn.CrossEntropyLoss()
     
     if optimizer_name == "SGD":
-        optimizer = optim.SGD(model.parameters(), lr=0.01)
+        optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     elif optimizer_name == "Adam":
-        optimizer = optim.Adam(model.parameters(), lr=0.001)
+        optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     elif optimizer_name == "RMSprop":
-        optimizer = optim.RMSprop(model.parameters(), lr=0.001)
+        optimizer = optim.RMSprop(model.parameters(), lr=learning_rate)
 
     for epoch in range(EPOCHS):
         model.train()
@@ -82,5 +85,5 @@ def train_and_evaluate(optimizer_name):
 
     wandb.finish()
 
-for optimizer in ["SGD", "Adam", "RMSprop"]:
-    train_and_evaluate(optimizer)
+if __name__ == "__main__":
+    train_and_evaluate()
