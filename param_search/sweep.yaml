@@ -1,0 +1,18 @@
+program: train.py
+method: random  # available methods: grid, random, bayes
+metric:
+  name: test_accuracy
+  goal: maximize
+parameters:
+  batch_size:
+    values: [32, 64, 128]
+  learning_rate:
+    distribution: uniform
+    min: 0.0001
+    max: 0.01
+  dropout:
+    distribution: uniform
+    min: 0.1
+    max: 0.5
+  epochs:
+    value: 5

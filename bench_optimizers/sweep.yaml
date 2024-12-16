@@ -1,0 +1,7 @@
+program: bench_optimizers/run.py
+method: grid
+parameters:
+  optimizer:
+    values: ["SGD", "Adam"]
+  learning_rate:
+    values: [0.01, 0.001]
